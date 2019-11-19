@@ -38,4 +38,4 @@ $ stack run -- ./resources/glider.txt --gui
 
 ## References
 
-[コモナドを使った抽象化の威力をライフゲームで試してみた](https://qiita.com/lotz/items/fbc4788b8ea8313cbf76){:target="_blank"}
+[コモナドを使った抽象化の威力をライフゲームで試してみた](https://qiita.com/lotz/items/fbc4788b8ea8313cbf76)
