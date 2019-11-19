@@ -1,4 +1,4 @@
-module GameOfLife.GUI
+module GameOfLife.Graphics.GUI
   (run
   )
   where

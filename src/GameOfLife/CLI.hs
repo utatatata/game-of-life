@@ -1,30 +1,61 @@
 module GameOfLife.CLI
-  ( run
+  (run
   )
   where
 
-import Control.Monad (replicateM_)
-import Control.Concurrent (threadDelay)
-import Data.List (intercalate)
-import qualified Data.DoubleZipper as DZ
-import GameOfLife.Field (Field(..))
+import Data.Semigroup ((<>))
+import qualified GameOfLife.Graphics.CLI as CLI
 import qualified GameOfLife.Field as F
+import qualified GameOfLife.Graphics.GUI as GUI
+import Options.Applicative (Parser, execParser, fullDesc, header, help, helper, info, long, metavar, progDesc, short, strArgument, switch, (<**>))
+import System.Environment (getArgs)
 
-draw :: Int -> Int -> Field -> IO ()
-draw width height f =
+data Args = Args
+  { file :: String
+  , inCLI :: Bool
+  , inGUI :: Bool
+  }
+
+data Mode
+  = CLI
+  | GUI
+
+args :: Parser Args
+args = Args
+  <$> strArgument
+      ( metavar "FILE"
+      <> help "Path to a file giving an initial state of cells."
+      )
+  <*> switch
+      ( long "cli"
+      <> short 'c'
+      <> help "Run in CLI."
+      )
+  <*> switch
+      ( long "gui"
+      <> short 'g'
+      <> help "Run in GUI (use GLUT)."
+      )
+
+command :: Args -> IO ()
+command (Args file inCLI inGUI) = do
+  text <- lines <$> readFile file
   let
-    css = DZ.toList f
-  in
-    flip mapM_ (take height css) $ \cs ->
-      putStrLn $ intercalate " " $ map (pure . F.toChar) $ take width cs
+    width = case text of
+      xs@(_:_) : _ -> length xs
+      _ -> 0
+    height = case text of
+      xs@(_ : _) -> length xs
+      [] -> 0
+    field = F.fromStrings text
+  case (inCLI, inGUI) of
+    (_, True) -> GUI.run (width, height) 3 field
+    _ -> CLI.run (width, height) 10 field
 
-run :: (Int, Int) -> Int -> Field -> IO ()
-run (width, height) fps initField =
-  loop initField
+run :: IO ()
+run = command =<< execParser opts
   where
-  loop field = do
-    replicateM_ height $ putStr "\ESC[A\ESC[2K" -- move the cursor up and clear entire line
-    draw width height field
-    let field' = F.update field
-    threadDelay $ 1000000 `div` fps
-    loop field'
+    opts = info (args <**> helper)
+      ( fullDesc
+      <> header "life - Game of Life"
+      )
