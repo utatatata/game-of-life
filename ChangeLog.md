@@ -1,3 +1,3 @@
-# Changelog for life-game
+# Changelog for game-of-life
 
 ## Unreleased changes

@@ -9,7 +9,31 @@
 
 ## Build & Run
 
-Use Stack.
+```
+$ stack build
+
+$ stack exec life -- --help
+
+# or
+
+$ stack run -- --help
+```
+
+## Usage
+
+```
+$ stack run -- --help
+```
+
+e.g.
+
+```
+$ stack run -- ./resources/gosper.txt
+```
+
+```
+$ stack run -- ./resources/glider.txt --gui
+```
 
 
 ## References
