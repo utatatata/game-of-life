@@ -8,10 +8,8 @@ onn :: (b -> b -> b -> c) -> (a -> b) -> (a -> a -> a -> c)
 onn f g x y z = f (g x) (g y) (g z)
 
 trio :: [a] -> [(a, a, a)]
-trio [] = []
-trio (x:[]) = []
-trio (x:y:[]) = []
 trio (x:y:z:ws) = (x, y, z) : (trio (y:z:ws))
+trio _ = []
 
 extend :: [a] -> [a]
 extend [] = []
@@ -24,14 +22,19 @@ data Cell
   | Dead
   deriving (Show, Eq)
 
+fromChar :: Char -> Cell
+fromChar '#' = Alive
+fromChar _ = Dead
+
 type State = [[Cell]]
 
-fromLines :: [[Char]] -> State
+fromLines :: [String] -> State
 fromLines lines =
-  [ [ if chr == '#' then Alive else Dead
+  [ [ fromChar chr
     | chr <- line
     ]
-  | line <- lines]
+  | line <- lines
+  ]
 
 type Neighbor =
   ( (Cell, Cell, Cell)
@@ -58,7 +61,7 @@ nextCell
       ns = length $ filter (== Alive) [tl, tc, tr, ml, mr, bl, bc, br]
     in
       case (mc, ns) of
-        (Dead, ns) | ns == 3 -> Alive
+        (Dead, 3) -> Alive
         (Alive, ns) | ns == 2 || ns == 3 -> Alive
         _ -> Dead
 
