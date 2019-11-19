@@ -1,7 +1,8 @@
-module LifeGame.GUI where
+module GameOfLife.GUI where
 
--- import Graphics.Gloss (Color(..), Picture(..))
-import Graphics.Gloss
+import GameOfLife.Field (Cell(..))
+import Graphics.Gloss (Color(..), Display(..), Picture(..), blue, dark, red, simulate, white)
+import Graphics.Gloss.Data.ViewPort (ViewPort)
 
 size :: Float
 size = 45
@@ -23,3 +24,11 @@ cell posX posY color =
         , (x, y + size)
         ]
 
+cellColor :: Cell -> Color
+cellColor Alive = red
+cellColor Dead = blue
+
+-- draw :: Field -> Picture
+-- draw f =
+--   Pictures
+--     []

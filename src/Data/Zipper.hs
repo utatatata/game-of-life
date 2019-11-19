@@ -2,6 +2,8 @@ module Data.Zipper
   ( Zipper(..)
   , goNext
   , goPrev
+  , fromList
+  , toList
   )
   where
 
@@ -22,3 +24,9 @@ goNext (Zipper ls c (r:rs)) = Zipper (c:ls) r rs
 
 goPrev :: Zipper a -> Zipper a
 goPrev (Zipper (l:ls) c rs) = Zipper ls l (c:rs)
+
+fromList :: a -> [a] -> Zipper a
+fromList x xs = Zipper (repeat x) x (xs ++ repeat x)
+
+toList :: Zipper a -> [a]
+toList (Zipper _ _ xs) = xs
