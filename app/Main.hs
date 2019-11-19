@@ -1,14 +1,8 @@
 module Main where
 
-import Control.Comonad (Comonad(..))
-import Data.DoubleZipper (DoubleZipper(..))
-import Data.Zipper (Zipper(..))
-import Data.List (intercalate)
-
-import qualified Data.DoubleZipper as DZ
 import qualified GameOfLife.CLI as CLI
-import GameOfLife.Field (Field, Cell(..))
 import qualified GameOfLife.Field as F
+import qualified GameOfLife.GUI as GUI
 import System.Environment (getArgs)
 
 main :: IO ()
@@ -23,4 +17,5 @@ main = do
       xs@(_ : _) -> length xs
       [] -> 0
     field = F.fromStrings text
-  CLI.run (width, height) 10 field
+  -- CLI.run (width, height) 10 field
+  GUI.run (width, height) 3 field
